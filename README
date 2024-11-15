@@ -1,0 +1,24 @@
+Index html
+Tramite l’utilizzo di chat gpt devo fare una piattaforma js,css, html,  per fare una verifica, deve avere almeno 3 domande aperte, e almeno 2 testi con 5 domande a crocette (4 scelte)
+deve esserci una homepage formata da 6 rettangoli, i primi 3 portano alle domande aperte, i 2 successivi alle domande dei testi e l’ultimo è per consegnare, in alto a destra c'è un timer
+
+in tutto devono esserci 3 pagine, il contenuto deve essere preso in modo dinamico da un file json
+
+
+
+Nella pagina delle domande aperte c’è scritta la domanda in alto, la text area in mezzo alla pagina, un contatore dei caratteri ed un tasto per tornare al menù ed un tasto per andare avanti / indietro
+
+Nella pagina delle domande a crocette c’è il testo in alto e poi le 5 domande a crocette, la parte difficile è saper salvare le cose già inserite, con il localstorage del browser che si aggiorna ogni volta che si preme un tasto.
+
+il local storage deve venir salvato su un file txt quando viene premuto fine
+
+
+il timer deve essere su tutte le pagine
+
+
+il risultato finale deve essere 
+index.html ->homepage
+domandaaperta.html -> i file per le domande aperte
+crocetta.html -> file perl e domande aperte
+style.css->  un file per tutto
+function.js -> un file per tutto

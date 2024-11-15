@@ -1,0 +1,29 @@
+{
+    "domandeAperte": [
+        { "domanda": "Qual è il tuo colore preferito e perché?" },
+        { "domanda": "Descrivi il tuo libro preferito." },
+        { "domanda": "Quali sono i tuoi obiettivi per il futuro?" }
+    ],
+    "testi": [
+        {
+            "titolo": "Testo 1",
+            "domande": [
+                { "domanda": "Chi è l'autore?", "opzioni": ["Autore A", "Autore B", "Autore C", "Autore D"] },
+                { "domanda": "Qual è il tema?", "opzioni": ["Tema A", "Tema B", "Tema C", "Tema D"] },
+                { "domanda": "Dove si svolge?", "opzioni": ["Luogo A", "Luogo B", "Luogo C", "Luogo D"] },
+                { "domanda": "In che anno?", "opzioni": ["Anno A", "Anno B", "Anno C", "Anno D"] },
+                { "domanda": "Quante pagine?", "opzioni": ["100", "200", "300", "400"] }
+            ]
+        },
+        {
+            "titolo": "Testo 2",
+            "domande": [
+                { "domanda": "Chi è l'autore?", "opzioni": ["Autore E", "Autore F", "Autore G", "Autore H"] },
+                { "domanda": "Qual è il tema?", "opzioni": ["Tema E", "Tema F", "Tema G", "Tema H"] },
+                { "domanda": "Dove si svolge?", "opzioni": ["Luogo E", "Luogo F", "Luogo G", "Luogo H"] },
+                { "domanda": "In che anno?", "opzioni": ["Anno E", "Anno F", "Anno G", "Anno H"] },
+                { "domanda": "Quante pagine?", "opzioni": ["150", "250", "350", "450"] }
+            ]
+        }
+    ]
+}

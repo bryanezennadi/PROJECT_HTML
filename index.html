@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Verifica</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="function.js" defer></script>
+</head>
+<body>
+    <div id="timer">Tempo rimasto: <span id="time">10:00</span></div>
+    
+    <!-- Contenitore principale per la griglia -->
+    <div class="main-container">
+        <!-- Colonna di sinistra -->
+        <div class="column">
+            <div class="box" onclick="loadPage('domandaaperta.html', 1)">Domanda Aperta 1</div>
+            <div class="box" onclick="loadPage('domandaaperta.html', 2)">Domanda Aperta 2</div>
+            <div class="box" onclick="loadPage('domandaaperta.html', 3)">Domanda Aperta 3</div>
+        </div>
+        
+        <!-- Colonna di destra -->
+        <div class="column">
+            <div class="box" onclick="loadPage('crocetta.html', 1)">Testo 1 - Crocette</div>
+            <div class="box" onclick="loadPage('crocetta.html', 2)">Testo 2 - Crocette</div>
+            <div class="box" onclick="submit()">Consegna</div>
+        </div>
+    </div>
+</body>
+</html>

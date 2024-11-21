@@ -1,29 +1,59 @@
 {
     "domandeAperte": [
-        { "domanda": "Qual è il tuo colore preferito e perché?" },
-        { "domanda": "Descrivi il tuo libro preferito." },
-        { "domanda": "Quali sono i tuoi obiettivi per il futuro?" }
-    ],
-    "testi": [
         {
-            "titolo": "Testo 1",
-            "domande": [
-                { "domanda": "Chi è l'autore?", "opzioni": ["Autore A", "Autore B", "Autore C", "Autore D"] },
-                { "domanda": "Qual è il tema?", "opzioni": ["Tema A", "Tema B", "Tema C", "Tema D"] },
-                { "domanda": "Dove si svolge?", "opzioni": ["Luogo A", "Luogo B", "Luogo C", "Luogo D"] },
-                { "domanda": "In che anno?", "opzioni": ["Anno A", "Anno B", "Anno C", "Anno D"] },
-                { "domanda": "Quante pagine?", "opzioni": ["100", "200", "300", "400"] }
-            ]
+          "domanda": "Qual è il tuo colore preferito?"
         },
         {
-            "titolo": "Testo 2",
-            "domande": [
-                { "domanda": "Chi è l'autore?", "opzioni": ["Autore E", "Autore F", "Autore G", "Autore H"] },
-                { "domanda": "Qual è il tema?", "opzioni": ["Tema E", "Tema F", "Tema G", "Tema H"] },
-                { "domanda": "Dove si svolge?", "opzioni": ["Luogo E", "Luogo F", "Luogo G", "Luogo H"] },
-                { "domanda": "In che anno?", "opzioni": ["Anno E", "Anno F", "Anno G", "Anno H"] },
-                { "domanda": "Quante pagine?", "opzioni": ["150", "250", "350", "450"] }
-            ]
+          "domanda": "Che tipo di musica ti piace?"
+        },
+        {
+          "domanda": "Cosa pensi del cambiamento climatico?"
         }
-    ]
-}
+      ],
+      "sezioni": [
+        {
+          "titolo": "Sezione 1 - Attività e Hobby",
+          "domande": [
+            {
+              "domanda": "Qual è la tua attività preferita durante il tempo libero?",
+              "opzioni": ["Leggere libri", "Giocare ai videogiochi", "Fare escursioni", "Cucinare"]
+            },
+            {
+              "domanda": "Quale sport ti piace praticare?",
+              "opzioni": ["Calcio", "Tennis", "Nuoto", "Basket"]
+            },
+            {
+              "domanda": "Qual è il tuo genere musicale preferito?",
+              "opzioni": ["Rock", "Jazz", "Pop", "Classica"]
+            },
+            {
+              "domanda": "Dove ti piace trascorrere le vacanze?",
+              "opzioni": ["Mare", "Montagna", "Città storiche", "In campagna"]
+            }
+          ]
+        },
+        {
+          "titolo": "Sezione 2 - Viaggi e Cucina",
+          "domande": [
+            {
+              "domanda": "Qual è la tua destinazione ideale per una vacanza?",
+              "opzioni": ["Giappone", "Francia", "Egitto", "Australia"]
+            },
+            {
+              "domanda": "Quale tipo di cucina ti piace di più?",
+              "opzioni": ["Italiana", "Messicana", "Giapponese", "Indiana"]
+            },
+            {
+              "domanda": "Quale stagione preferisci per viaggiare?",
+              "opzioni": ["Estate", "Autunno", "Inverno", "Primavera"]
+            },
+            {
+              "domanda": "Come preferisci muoverti durante un viaggio?",
+              "opzioni": ["A piedi", "In bicicletta", "In macchina", "In treno"]
+            }
+          ]
+        }
+      ]
+    
+  }
+  

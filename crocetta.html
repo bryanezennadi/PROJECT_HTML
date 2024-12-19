@@ -7,15 +7,21 @@
 </head>
 <body>
     <div id="timer">Tempo rimasto: <span id="time">10:00</span></div>
+    <div id="submission-message" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: green; color: white; font-size: 24px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        Consegna effettuata
+    </div>
     
     <div id="text-container">
         <!-- Sezione 1 -->
-        <h1 id="section-title-0"></h1>
-        <div id="questions-0"></div>
+        <h1 id="section-title"></h1>
+        <div id="questions1"></div>
 
         <!-- Sezione 2 -->
-        <h1 id="section-title-1"></h1>
-        <div id="questions-1"></div>
+        <h1 id="section-title2"></h1>
+        <div id="questions2"></div>
+        <button onclick="goBack()">Indietro</button>
+        <button onclick="goForward()">Avanti</button>
+        <button onclick="goHome()">Home</button> 
     </div>
 </body>
 </html>

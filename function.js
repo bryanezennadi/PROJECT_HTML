@@ -32,63 +32,59 @@ function loadData() {
 
 // Funzione per caricare il timer salvato
 function loadTimer() {
-    // Controlla se il timer è stato salvato nel localStorage
     const savedTime = localStorage.getItem('timeLeft');
     if (savedTime) {
-        timeLeft = parseInt(savedTime);  // Imposta il tempo rimanente al valore salvato
+        timeLeft = parseInt(savedTime);
     } else {
-        // Se il timer non è salvato (prima volta o ricaricamento completo), salvalo come 10 minuti
         localStorage.setItem('timeLeft', timeLeft);
     }
 }
 
-// Funzione per avviare il timer
 function startTimer() {
+    // Avvia il timer, che decrementa ogni secondo
     timer = setInterval(() => {
-        timeLeft--; // Diminuisce il tempo rimanente ogni secondo
-        // Salva il tempo rimanente nel localStorage
-        localStorage.setItem('timeLeft', timeLeft);
-        // Mostra il tempo rimanente nel formato minuti:secondi
-        document.getElementById('time').textContent = `${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
-
-        // Quando il tempo scade, invia il test
-        if (timeLeft <= 0) {
-            clearInterval(timer); // Ferma il timer
-            submit(); // Funzione di invio (definirla separatamente)
+        if (timeLeft > 0) {
+            timeLeft--;  // Decrementa il tempo rimasto di un secondo
+            document.getElementById("timer").textContent = `Tempo rimanente: ${timeLeft} secondi`; // Mostra il tempo rimanente
+        } else {
+            clearInterval(timer);  // Ferma il timer
+            showSubmissionMessage();  // Mostra il messaggio di consegna
+            submit();  // Invia automaticamente le risposte quando il tempo scade
         }
-    }, 1000);
+    }, 1000);  // Intervallo di 1 secondo
+}
+
+function showSubmissionMessage() {
+    // Mostra il messaggio "Consegna effettuata"
+    const messageDiv = document.getElementById('submission-message');
+    messageDiv.style.display = 'block';
+
+    // Nasconde il messaggio dopo 3 secondi
+    setTimeout(() => {
+        messageDiv.style.display = 'none';
+    }, 3000); // Nasconde dopo 3 secondi
 }
 
 // Funzione per aggiornare il conteggio dei caratteri (domande aperte)
 function updateCharCount() {
-    document.getElementById('char-count').textContent = document.getElementById('answer').value.length;
+    const answerElement = document.getElementById('answer');
+    if (answerElement) {
+        document.getElementById('char-count').textContent = answerElement.value.length;
+    }
 }
-
-// Funzione per il submit del test (aggiungi la logica necessaria)
-function submit() {
-    alert("Tempo scaduto, il test è stato inviato!");
-    // Qui puoi aggiungere la logica per inviare i dati del test
-}
-
-
-// Carica i dati appena la pagina è pronta
-document.addEventListener('DOMContentLoaded', loadData);
 
 // Funzione per caricare le domande aperte
 function loadOpenQuestion(data) {
     try {
         const questionIndex = parseInt(new URLSearchParams(window.location.search).get('q')) - 1;
-
-        // Controllo validità dell'indice
         if (isNaN(questionIndex) || questionIndex < 0 || questionIndex >= data.domandeAperte.length) {
             throw new Error("Indice della domanda non valido.");
         }
 
-        // Recupero e visualizzazione della domanda
         const questionElement = document.getElementById('question');
         const answerElement = document.getElementById('answer');
         const charCountElement = document.getElementById('char-count');
-        
+
         if (!questionElement || !answerElement || !charCountElement) {
             throw new Error("Elementi del DOM mancanti.");
         }
@@ -96,19 +92,15 @@ function loadOpenQuestion(data) {
         const question = data.domandeAperte[questionIndex];
         questionElement.textContent = question.domanda;
 
-        // Recupero risposta salvata localmente
         const savedAnswer = localStorage.getItem(`openAnswer${questionIndex}`) || '';
         answerElement.value = savedAnswer;
-
-        // Aggiornamento del conteggio caratteri
         charCountElement.textContent = savedAnswer.length;
-        
-        // Event listener per il salvataggio della risposta
+
         answerElement.addEventListener('input', saveOpenAnswer);
     } catch (error) {
         console.error("Errore nel caricamento della domanda aperta:", error);
         document.getElementById('question').textContent = "Errore: impossibile caricare la domanda.";
-        document.getElementById('answer').disabled = true;  // Disabilita il campo risposta in caso di errore
+        document.getElementById('answer').disabled = true;
     }
 }
 
@@ -120,125 +112,181 @@ function saveOpenAnswer() {
     updateCharCount();
 }
 
-// Funzione per aggiornare il conteggio dei caratteri
-function updateCharCount() {
-    document.getElementById('char-count').textContent = document.getElementById('answer').value.length;
-}
-
-// Funzione per caricare le domande a crocette
 function loadMultipleChoice(data) {
-    let sectionIndex = parseInt(new URLSearchParams(window.location.search).get('s')) - 1; // Indice della sezione
+    // Ottieni i parametri dalla query string
+    const params = new URLSearchParams(window.location.search);
 
-    // Se l'indice non è valido, carica la prima sezione (fallback)
-    if (isNaN(sectionIndex) || sectionIndex < 0 || !data.sezioni[sectionIndex]) {
-        console.warn("Parametro 's' mancante o non valido, carico la prima sezione.");
-        sectionIndex = 0; // Fallback alla prima sezione
+    // Definisci currentIndex, prendendo il valore da 'q' o 't', se presenti, altrimenti impostando a 1 come default
+    const currentIndex = parseInt(params.get('q')) || parseInt(params.get('t')) || 1;
+
+    // Gestione della sezione in base a currentIndex
+    if (currentIndex === 1) {
+        // Carica la Sezione 1
+        const section1 = data.sezioni[0]; // Prima sezione
+        document.getElementById('section-title').textContent = section1.titolo; // Titolo della sezione
+        const questions1 = section1.domande; // Domande della sezione
+
+        // Aggiungi le domande a crocette nella pagina
+        const questionsContainer1 = document.getElementById('questions1'); // Assicurati che ci sia un container con ID 'questions1'
+        questionsContainer1.innerHTML = ''; // Pulisce eventuali contenuti preesistenti
+
+        // Cicla su tutte le domande della Sezione 1
+        questions1.forEach((q, index) => {
+            const container = document.createElement('div');
+            container.classList.add('question-container');
+            
+            // Crea l'HTML per ogni domanda e le sue opzioni
+            const questionHTML = `
+                <p>${q.domanda}</p>
+                ${q.opzioni.map((opzione, i) => `
+                    <label>
+                        <input type="radio" name="q${currentIndex}_${index}" 
+                               onclick="saveAnswer(${currentIndex}, ${index}, ${i})" 
+                               ${localStorage.getItem(`section${currentIndex}q${index}`) == i ? 'checked' : ''}>
+                        ${opzione}
+                    </label><br>
+                `).join('')}
+            `;
+            
+            container.innerHTML = questionHTML;
+            questionsContainer1.appendChild(container);
+        });
     }
+    else if(currentIndex === 2){
+        // Carica la Sezione 2
+        const section2 = data.sezioni[1]; // Seconda sezione
+        document.getElementById('section-title2').textContent = section2.titolo; // Titolo della sezione
+        const questions2 = section2.domande; // Domande della sezione
 
-    const section = data.sezioni[sectionIndex]; // Recupera la sezione
-    document.getElementById('section-title').textContent = section.titolo; // Titolo della sezione
-    const questions = section.domande; // Domande della sezione
+        // Aggiungi le domande a crocette nella pagina
+        const questionsContainer2 = document.getElementById('questions2'); // Assicurati che ci sia un container con ID 'questions2'
+        questionsContainer2.innerHTML = ''; // Pulisce eventuali contenuti preesistenti
 
-    // Aggiungi le domande a crocette nella pagina
-    questions.forEach((q, index) => {
-        const container = document.createElement('div');
-        container.classList.add('question-container');
-        
-        // Crea l'HTML per ogni domanda e le sue opzioni
-        container.innerHTML = `
-            <p>${q.domanda}</p>
-            ${q.opzioni.map((opzione, i) => `
-                <label>
-                    <input type="radio" name="q${index}" 
-                           onclick="saveAnswer(${sectionIndex}, ${index}, ${i})" 
-                           ${localStorage.getItem(`section${sectionIndex}q${index}`) == i ? 'checked' : ''}>
-                    ${opzione}
-                </label><br>
-            `).join('')}
-        `;
-        
-        // Aggiungi la domanda e le opzioni al contenitore delle domande
-        document.getElementById('questions').appendChild(container);
-    });
+        // Cicla su tutte le domande della Sezione 2
+        questions2.forEach((q, index) => {
+            const container = document.createElement('div');
+            container.classList.add('question-container');
+            
+            // Crea l'HTML per ogni domanda e le sue opzioni
+            const questionHTML = `
+                <p>${q.domanda}</p>
+                ${q.opzioni.map((opzione, i) => `
+                    <label>
+                        <input type="radio" name="q${currentIndex}_${index}" 
+                               onclick="saveAnswer(${currentIndex}, ${index}, ${i})" 
+                               ${localStorage.getItem(`section${currentIndex}q${index}`) == i ? 'checked' : ''}>
+                        ${opzione}
+                    </label><br>
+                `).join('')}
+            `;
+            
+            container.innerHTML = questionHTML;
+            questionsContainer2.appendChild(container);
+        });
+    }
 }
+
 
 // Funzione per salvare la risposta
 function saveAnswer(sectionIndex, questionIndex, answerIndex) {
-    // Salva la risposta nel localStorage
-    localStorage.setItem(`section${sectionIndex}q${questionIndex}`, answerIndex);
+    // Salva la risposta nel localStorage specificando la sezione, la domanda e la risposta
+    const key = `section${sectionIndex}q${questionIndex}`;
+    localStorage.setItem(key, answerIndex);
 }
 
 
-// Funzione per salvare la risposta delle domande a crocette
-function saveAnswer(textIndex, questionIndex, optionIndex) {
-    localStorage.setItem(`text${textIndex}q${questionIndex}`, optionIndex);
-}
-
-
-
-// Funzione per aggiornare il conteggio caratteri
-function updateCharCount() {
-    document.getElementById('char-count').textContent = document.getElementById('answer').value.length;
-}
-
-// Carica le domande quando il DOM è pronto
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.title === "Domanda Aperta") {
-        loadOpenQuestions(); // Carica domande aperte
-    } else if (document.title === "Domande a Crocette") {
-        loadMultipleChoiceQuestions(); // Carica domande a crocette
-    }
-});
-
-
-// Carica i dati appena la pagina è pronta
-document.addEventListener('DOMContentLoaded', loadData);
-
-
+// Funzione per il submit del test
 function submit() {
-    const answers = JSON.stringify(localStorage);
-    fetch('save.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: answers
+    // Ottieni tutte le risposte salvate nel localStorage
+    const answers = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        answers[key] = value;
+    }
+
+    // Crea un array separato per le risposte alle domande aperte
+    let openAnswers = [];
+    let sectionAnswers = [];
+
+    // Filtra le risposte per separare le open answers
+    for (const key in answers) {
+        if (key.startsWith('openAnswer')) {
+            openAnswers.push(`${key}: ${answers[key]}`);
+        } else if (key !== 'timeLeft') {
+            // Per le risposte a domande a crocette, aggiungi +1 all'indice
+            const number = parseInt(key.replace(/[^0-9]/g, '')); // Estrai l'indice numerico dalla chiave
+            const response = parseInt(answers[key]) + 1; // Aggiungi 1 alla risposta per avere numerazione da 1 a 4
+            sectionAnswers.push(`section${number}q${number + 1}: ${response}`); // +1 all'indice per la numerazione da 1
+        }
+    }
+
+    // Assicurati che le open answers siano numerate da 1 a 4
+    openAnswers = openAnswers.map((answer, index) => {
+        const number = index + 1; // Cambia la numerazione da 0-3 a 1-4
+        return `openAnswer${number}: ${answer.split(": ")[1]}`; // Mantieni solo il testo dopo ": "
     });
-    alert("Risposte consegnate!");
+
+    // Ordina le risposte (open answers all'inizio, timeLeft alla fine)
+    const sortedAnswers = [
+        ...openAnswers,           // Le open answers vengono per prime
+        ...sectionAnswers,        // Poi le risposte delle domande a scelta
+        `timeLeft: ${answers['timeLeft']}` // Alla fine, il tempo rimasto
+    ];
+
+    // Unisci tutto in una stringa
+    let answersText = sortedAnswers.join("\n");
+
+    // Crea un Blob con il contenuto delle risposte
+    const blob = new Blob([answersText], { type: 'text/plain' });
+
+    // Crea un URL per il Blob
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'risposte.txt'; // Nome del file di testo
+
+    // Aggiungi il link al DOM e simula un click per avviare il download
+    link.click();
+
+    // Pulisci il timer (se esiste) e il localStorage
     clearInterval(timer);
     localStorage.clear();
 }
+
+
+
+// Funzioni per la navigazione tra le pagine
 function loadPage(page, questionIndex) {
-    // Costruisce l'URL con il parametro query
     const url = `${page}?q=${questionIndex}`;
-    
-    // Naviga verso la nuova pagina
     window.location.href = url;
 }
+
 function goForward() {
     const params = new URLSearchParams(window.location.search);
-    const currentIndex = parseInt(params.get('q')) || parseInt(params.get('t')) || 1; // Indice attuale
-    const currentPage = window.location.pathname; // Ottieni il nome della pagina corrente
-    
-    const totalOpenQuestions = 3; // Numero totale di domande aperte
-    const totalMultipleChoice = 2; // Numero totale di domande a crocette
+    const currentIndex = parseInt(params.get('q')) || parseInt(params.get('t')) || 1;
+    const currentPage = window.location.pathname;
+
+    const totalOpenQuestions = 3;
+    const totalMultipleChoice = 2;
 
     let nextPage;
 
-    // Logica per determinare la prossima pagina
     if (currentPage.includes('domandaaperta.html')) {
         if (currentIndex < totalOpenQuestions) {
             nextPage = `domandaaperta.html?q=${currentIndex + 1}`;
         } else {
-            nextPage = `crocetta.html?t=1`; // Passa alla prima domanda a crocette
+            nextPage = `crocetta.html?t=1`;
+           
         }
     } else if (currentPage.includes('crocetta.html')) {
         if (currentIndex < totalMultipleChoice) {
             nextPage = `crocetta.html?t=${currentIndex + 1}`;
+           
         } else {
-            nextPage = `domandaaperta.html?q=1`; // Torna alla prima domanda aperta (o fine test)
+            nextPage = `domandaaperta.html?q=1`;
         }
     }
 
-    // Naviga verso la prossima pagina
     if (nextPage) {
         window.location.href = nextPage;
     }
@@ -246,34 +294,35 @@ function goForward() {
 
 function goBack() {
     const params = new URLSearchParams(window.location.search);
-    const currentIndex = parseInt(params.get('q')) || parseInt(params.get('t')) || 1; // Indice attuale
-    const currentPage = window.location.pathname; // Ottieni il nome della pagina corrente
-    
-    const totalOpenQuestions = 3; // Numero totale di domande aperte
-    const totalMultipleChoice = 2; // Numero totale di domande a crocette
+    const currentIndex = parseInt(params.get('q')) || parseInt(params.get('t')) || 1;
+    const currentPage = window.location.pathname;
+
+    const totalOpenQuestions = 3;
+    const totalMultipleChoice = 2;
 
     let prevPage;
 
-    // Logica per determinare la pagina precedente
     if (currentPage.includes('domandaaperta.html')) {
         if (currentIndex > 1) {
             prevPage = `domandaaperta.html?q=${currentIndex - 1}`;
         } else {
-            prevPage = `crocetta.html?t=${totalMultipleChoice}`; // Vai all'ultima domanda a crocette
+            prevPage = `crocetta.html?t=${totalMultipleChoice}`;
+            
         }
     } else if (currentPage.includes('crocetta.html')) {
         if (currentIndex > 1) {
             prevPage = `crocetta.html?t=${currentIndex - 1}`;
+           
         } else {
-            prevPage = `domandaaperta.html?q=${totalOpenQuestions}`; // Vai all'ultima domanda aperta
+            prevPage = `domandaaperta.html?q=${totalOpenQuestions}`;
         }
     }
 
-    // Naviga verso la pagina precedente
     if (prevPage) {
         window.location.href = prevPage;
     }
 }
+
 function goHome() {
-    window.location.href = 'index.html'; // Reindirizza alla home (pagina principale)
+    window.location.href = 'index.html';
 }

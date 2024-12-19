@@ -8,6 +8,9 @@
 </head>
 <body>
     <div id="timer">Tempo rimasto: <span id="time">10:00</span></div>
+    <div id="submission-message" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: red; color: white; font-size: 24px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        Consegna effettuata
+    </div>
     <div id="question-container">
         <h1 id="question"></h1>
         <textarea id="answer" oninput="saveOpenAnswer()"></textarea>
